@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASPWebApi.Controllers
-{
+{ //Is it changing in local
     [Route("api/[controller]")]
     [ApiController]
     public class CalculatorController : ControllerBase
     {
 /*        [HttpGet("/add")]  //if you add '/' it becomes root
-       // [HttpGet]
+       // [HttpGet] 
         public int Add(int x, int y)
         {
             return x + y;
