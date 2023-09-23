@@ -21,7 +21,7 @@ namespace ASPWebApi.Controllers
             return _repositoryEmployee.AllEmployees();
         }*/
 
-        [HttpGet]
+        [HttpGet("/GetAllEmployees")]
         public IEnumerable<EmpViewModel> AllEmployees()
         {
             List<Employee> employees = _repositoryEmployee.AllEmployees();
@@ -51,7 +51,7 @@ namespace ASPWebApi.Controllers
             return employees;
         }
 
-        [HttpDelete("id")]
+/*        [HttpDelete("id")]
         public int DeleteEmployee(int id)
         {
             // Call the repository to delete the employee.
@@ -59,21 +59,66 @@ namespace ASPWebApi.Controllers
 
             // Return a success response or an appropriate status code.
             return id; // HTTP 204 No Content is a common response for successful deletions.
+        }*/
+
+        [HttpDelete("/DeleteEmployee/{id}")]
+        public int DeleteEmployee(int id)
+        {
+            // Call the repository to delete the employee.
+            _repositoryEmployee.DeleteEmployee1(id);
+
+            // Return a success response or an appropriate status code.
+            return id; // HTTP 204 No Content is a common response for successful deletions.
         }
 
-        [HttpPost]
-        public Employee PostEmployee([FromBody] Employee newEmployee)
+
+
+        /*        [HttpPost]
+                public Employee PostEmployee([FromBody] Employee newEmployee)
+                {
+                    return _repositoryEmployee.AddEmployee(newEmployee);
+                }*/
+        [HttpPost("/AddNewEmployee")]
+        public int CreateEmployee(EmpViewModel newEmployee)
         {
-            return _repositoryEmployee.AddEmployee(newEmployee);
+            /*_repositoryEmployee.AddEmployee(newEmployee); 
+            return newEmployee;*/
+            Employee emp = new Employee()
+            {
+                FirstName = newEmployee.FirstName,
+                LastName = newEmployee.LastName,
+                BirthDate = newEmployee.BirthDate,
+                HireDate = newEmployee.HireDate,
+                Title = newEmployee.Title,
+                City = newEmployee.City,
+                ReportsTo = newEmployee.ReportsTo > 0 ? newEmployee.ReportsTo : null
+            };
+            int result = _repositoryEmployee.AddEmployee(emp);
+            return result;
         }
 
-        [HttpPut("id")]
-        public Employee UpdateEmployee(int id, [FromBody] Employee updateEmployee)
+        /*        [HttpPut("id")]
+                public Employee UpdateEmployee(int id, [FromBody] Employee updateEmployee)
+                {
+                    updateEmployee.EmployeeId = id;
+                    Employee saveEmployee = _repositoryEmployee.UpdateEmployee(updateEmployee);
+                    return saveEmployee;
+                }*/
+
+        [HttpPut("/UpdateEmployee")]
+        public int UpdateEmployee( [FromBody] EmpViewModel updateEmployee)
         {
-            updateEmployee.EmployeeId = id;
-            Employee saveEmployee = _repositoryEmployee.UpdateEmployee(updateEmployee);
-            return saveEmployee;
+            //updateEmployee.EmployeeId = id;
+            Employee employee = new Employee() 
+            {
+                EmployeeId=updateEmployee.EmpId, FirstName = updateEmployee.FirstName, LastName = updateEmployee.LastName,
+                BirthDate = updateEmployee.BirthDate,HireDate = updateEmployee.HireDate,City = updateEmployee.City,
+                ReportsTo = updateEmployee.ReportsTo,   Title = updateEmployee.Title
+            };
+            int result = _repositoryEmployee.UpdateEmployee1(employee);
+            return result;
         }
+
 
     }
 }
